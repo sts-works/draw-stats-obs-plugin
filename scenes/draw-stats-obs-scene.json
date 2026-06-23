@@ -1,0 +1,14 @@
+{
+  "name": "Draw Stats OBS Panel",
+  "sources": [
+    {
+      "id": "browser_source",
+      "name": "Draw Stats Panel",
+      "settings": {
+        "height": 260,
+        "url": "https://drawstats.sts.works/downloads/releases/obs-browser-source/obs_browser_source_panel.html?user_id=YOUR_USER_ID",
+        "width": 420
+      }
+    }
+  ]
+}
