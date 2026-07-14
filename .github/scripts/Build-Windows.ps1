@@ -58,7 +58,7 @@ function Build {
     }
 
     $CmakeBuildArgs += @(
-        '--preset', "windows-${Target}"
+        '--preset', "windows-ci-${Target}"
         '--config', $Configuration
         '--parallel'
         '--', '/consoleLoggerParameters:Summary', '/noLogo'

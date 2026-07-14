@@ -23,16 +23,50 @@
       }
     },
     {
+      "name": "macos-ci",
+      "inherits": ["base"],
+      "binaryDir": "${sourceDir}/build_macos",
+      "condition": {"type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin"},
+      "generator": "Xcode",
+      "cacheVariables": {
+        "CMAKE_OSX_DEPLOYMENT_TARGET": "12.0",
+        "CMAKE_OSX_ARCHITECTURES": "arm64;x86_64",
+        "ENABLE_OBS_QA_MODE": false
+      }
+    },
+    {
       "name": "windows-x64",
       "inherits": ["base"],
       "binaryDir": "$env{DRAW_STATS_OBS_BUILD_ROOT}/windows-x64",
       "condition": {"type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows"},
       "generator": "Visual Studio 17 2022",
       "architecture": "x64"
+    },
+    {
+      "name": "windows-ci-x64",
+      "inherits": ["base"],
+      "binaryDir": "${sourceDir}/build_x64",
+      "condition": {"type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows"},
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64",
+      "cacheVariables": {
+        "ENABLE_OBS_QA_MODE": false
+      }
+    },
+    {
+      "name": "ubuntu-ci-x86_64",
+      "inherits": ["base"],
+      "binaryDir": "${sourceDir}/build_x86_64",
+      "condition": {"type": "equals", "lhs": "${hostSystemName}", "rhs": "Linux"},
+      "cacheVariables": {
+        "ENABLE_OBS_QA_MODE": false
+      }
     }
   ],
   "buildPresets": [
     {"name": "macos", "configurePreset": "macos", "configuration": "RelWithDebInfo"},
-    {"name": "windows-x64", "configurePreset": "windows-x64", "configuration": "RelWithDebInfo"}
+    {"name": "windows-x64", "configurePreset": "windows-x64", "configuration": "RelWithDebInfo"},
+    {"name": "windows-ci-x64", "configurePreset": "windows-ci-x64", "configuration": "RelWithDebInfo"},
+    {"name": "ubuntu-ci-x86_64", "configurePreset": "ubuntu-ci-x86_64", "configuration": "RelWithDebInfo"}
   ]
 }
