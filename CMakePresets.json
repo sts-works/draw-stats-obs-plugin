@@ -1,0 +1,38 @@
+{
+  "version": 8,
+  "cmakeMinimumRequired": {"major": 3, "minor": 28, "patch": 0},
+  "configurePresets": [
+    {
+      "name": "base",
+      "hidden": true,
+      "cacheVariables": {
+        "ENABLE_FRONTEND_API": true,
+        "ENABLE_QT": true,
+        "BUILD_TESTING": true
+      }
+    },
+    {
+      "name": "macos",
+      "inherits": ["base"],
+      "binaryDir": "$env{DRAW_STATS_OBS_BUILD_ROOT}/macos",
+      "condition": {"type": "equals", "lhs": "${hostSystemName}", "rhs": "Darwin"},
+      "generator": "Xcode",
+      "cacheVariables": {
+        "CMAKE_OSX_DEPLOYMENT_TARGET": "12.0",
+        "CMAKE_OSX_ARCHITECTURES": "arm64"
+      }
+    },
+    {
+      "name": "windows-x64",
+      "inherits": ["base"],
+      "binaryDir": "$env{DRAW_STATS_OBS_BUILD_ROOT}/windows-x64",
+      "condition": {"type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows"},
+      "generator": "Visual Studio 17 2022",
+      "architecture": "x64"
+    }
+  ],
+  "buildPresets": [
+    {"name": "macos", "configurePreset": "macos", "configuration": "RelWithDebInfo"},
+    {"name": "windows-x64", "configurePreset": "windows-x64", "configuration": "RelWithDebInfo"}
+  ]
+}

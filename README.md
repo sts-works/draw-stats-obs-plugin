@@ -1,35 +1,44 @@
 # Draw Stats OBS Plugin
 
-Draw Stats OBS Plugin is an OBS Browser Source kit for showing a public Draw Stats profile panel in streams and recordings.
+Draw Stats OBS Plugin is a standalone Draw Stats capture client inside OBS Studio. It captures input metadata locally, provides onboarding and a live dashboard, reconciles aggregate results with the Draw Stats API, and renders selected dashboard elements as a transparent Browser Source.
 
-This package is distributed through GitHub Releases. It does not install a native OBS binary; it uses OBS Studio's built-in Browser Source, which is the stable path for web overlays.
+The plugin does not require Draw Stats Capture or another desktop client to be running.
 
 ## Install
 
-1. Download the latest release ZIP.
-2. In OBS Studio, add `Sources` -> `Browser`.
-3. Use this URL:
+1. Install the release plugin bundle for macOS or Windows in the OBS plugin directory.
+2. Start OBS and sign in from the Draw Stats dock.
+3. Select a drawing app or an exact running process.
+4. Set the idle threshold and start recording.
+5. Choose the dashboard elements to show and press `Add overlay`.
+
+The plugin creates or updates a `Draw Stats Overlay` Browser Source at 1280 by 720 and fits it to the current OBS canvas. The overlay is served only from the plugin's loopback server and contains sanitized aggregate state.
+
+## Capture Model
+
+- macOS uses a listen-only `CGEventTap` helper process.
+- Windows uses a Raw Input message-only helper window.
+- Raw keys, typed text, pointer coordinates, and window titles are never stored or sent.
+- The dock updates immediately from local events and sends only aggregate batches to the production API.
+- API responses reconcile local counters without blocking the local dashboard or stream overlay.
+
+## Build
+
+The project follows the OBS plugin template dependency layout. Set `DRAW_STATS_OBS_BUILD_ROOT`, configure the matching preset, and build `macos` or `windows-x64`.
 
 ```text
-https://drawstats.sts.works/downloads/releases/obs-browser-source/obs_browser_source_panel.html?user_id=YOUR_USER_ID
+cmake --preset macos
+cmake --build --preset macos
 ```
 
-4. Set width to `420` and height to `260`.
-5. Enable transparent background when your OBS build exposes that option.
-
-Replace `YOUR_USER_ID` with the Draw Stats public user id for the profile you want to show.
-
-## Release Contents
-
-- `plugin/obs_browser_source_panel.html`: pointer to the hosted OBS Browser Source.
-- `scenes/draw-stats-obs-scene.json`: OBS scene collection template.
-- `README.md`: install and release notes.
+The native bundle includes the input helper, localized dock resources, Qt TLS backends, and the transparent overlay application.
 
 ## Compatibility
 
-- OBS Studio 30 or newer is recommended.
-- The Draw Stats profile must be public.
-- The Browser Source refreshes every 30 seconds.
+- OBS Studio 32.1.2 is the pinned build and QA target.
+- macOS 12 or newer, Apple silicon.
+- Windows 10/11 x64.
+- Production sign-in opens in the system browser and returns through a loopback callback.
 
 ## License
 
